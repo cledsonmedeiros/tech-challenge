@@ -1,17 +1,23 @@
-version: "3.3"
+version: '3.8'
+
 services:
-  database:
+  adonis-mysql:
     image: mysql:5.7
-    container_name: mysql
     restart: always
-    environment:
-      MYSQL_DATABASE: "db"
-      MYSQL_USER: "db_user"
-      MYSQL_PASSWORD: "db_password"
-      MYSQL_ROOT_PASSWORD: "root_password"
+    container_name: adonis-mysql
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "tcp://localhost:3306"]
+      interval: 300s
+      timeout: 400s
+      retries: 10
     ports:
-      - "3306:3306"
+      - 3306:3306
     expose:
       - "3306"
     volumes:
-      - "./.mysql-data/db:/var/lib/mysql"
+      - .mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: 'adonis'
+      MYSQL_PASSWORD: 'adonis'
+      MYSQL_DATABASE: 'adonis'
+      MYSQL_ROOT_PASSWORD: 'root'
